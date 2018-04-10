@@ -1,0 +1,19 @@
+sudo: required
+dist: trusty
+addons:
+  apt:
+    packages:
+    - build-essential
+    - autoconf
+    - libtool
+    - libssl-dev
+    - libpcre3-dev
+    - asciidoc
+    - xmlto
+before_install:
+- git clone https://github.com/shadowsocksr-backup/shadowsocksr-libev.git
+script:
+- cd shadowsocksr-libev
+- ./configure && make
+- make install
+- ls
