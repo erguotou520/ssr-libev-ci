@@ -16,12 +16,10 @@ script:
 - cd shadowsocksr-libev
 - ./configure && make
 - sudo make install
-- sudo find / -name ss-local
+# - sudo find / -name ss-local
 deploy:
   provider: releases
   api_key: $GITHUB_TOKEN
   file_glob: true
   file: completions/bash/*
   skip_cleanup: true
-  on:
-    tags: true
