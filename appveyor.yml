@@ -11,8 +11,6 @@ max_jobs: 1
 
 init:
   - git config --global core.autocrlf input
-  - cd %CYG_ROOT%
-  - dir
 
 # curl -O https://www.openssl.org/source/openssl-1.0.2o.tar.gz;
 # tar zxf openssl-1.0.2o.tar.gz;
