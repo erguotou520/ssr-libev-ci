@@ -3,17 +3,23 @@ version: 0.1.{build}
 image: Visual Studio 2017
 platform:
   - x64
+environment:
+    global:
+        CYG_ROOT: C:\cygwin64
 
 max_jobs: 1
 
 init:
   - git config --global core.autocrlf input
 install:
-  - curl -O https://www.openssl.org/source/openssl-1.0.2o.tar.gz
-  - tar zxf openssl-1.0.2o.tar.gz
-  - cd openssl-1.0.2o
-  - ./config --prefix="$HOME/prebuilt" --openssldir="$HOME/prebuilt/openssl"
-  - make && make install
+  - cmd: '%CYG_ROOT%/bin/bash --login -lc |
+    "export CYGWIN=winsymlinks:native; mount \"$APPVEYOR_BUILD_FOLDER\install\" /usr/local; cd $APPVEYOR_BUILD_FOLDER; |
+    curl -O https://www.openssl.org/source/openssl-1.0.2o.tar.gz;
+    tar zxf openssl-1.0.2o.tar.gz;
+    cd openssl-1.0.2o;
+    ./config --prefix=\"$HOME/prebuilt\" --openssldir=\"$HOME/prebuilt/openssl\";
+    make && make install;
+    umount /usr/local"'
 
 build_script:
   - git clone https://github.com/shadowsocksr-backup/shadowsocksr-libev.git
