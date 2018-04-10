@@ -16,4 +16,4 @@ script:
 - cd shadowsocksr-libev
 - ./configure && make
 - sudo make install
-- find / -name ss-local
+- sudo find / -name ss-local
