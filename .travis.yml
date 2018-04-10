@@ -14,7 +14,7 @@ before_install:
 - git clone https://github.com/shadowsocksr-backup/shadowsocksr-libev.git
 script:
 - cd shadowsocksr-libev
-- ./configure && make
+- ./configure --disable-documentation && make
 - sudo make install
 # - sudo find / -name ss-local
 deploy:
@@ -23,3 +23,6 @@ deploy:
   file_glob: true
   file: completions/bash/*
   skip_cleanup: true
+  on:
+    repo: erguotou520/ssr-libev-ci
+    branch: master

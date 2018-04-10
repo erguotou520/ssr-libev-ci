@@ -18,13 +18,15 @@ init:
 # ./config --prefix=\"$HOME/prebuilt\" --openssldir=\"$HOME/prebuilt/openssl\";
 # make && make install;
 build_script:
+  - cmd: 'cd %CYG_ROOT%;dir'
+  - cmd: '%CYG_ROOT%/setup-x86.exe --quiet-mode --no-shortcuts --no-startmenu --no-desktop --upgrade-also --only-site --site http://cygwin.mirror.constant.com/ --root c:\cygwin-root --local-package-dir c:\cygwin-setup-cache --packages automake,gcc-g++,make,pkg-config,openssl-devel,libpcre,libicu-devel,zlib-devel,libcrypt-devel,perl,python3-devel,libsasl2-devel,cygport'
   - cmd: 'mkdir %APPVEYOR_BUILD_FOLDER%\install'
-  - cmd: '%CYG_ROOT%/bin/bash --login -lc "export CYGWIN=winsymlinks:native;
+  - cmd: 'c:/cygwin-root/bin/bash --login -lc "export CYGWIN=winsymlinks:native;
     mount \"$APPVEYOR_BUILD_FOLDER\install\" /usr/local;
     cd $APPVEYOR_BUILD_FOLDER;
     git clone https://github.com/shadowsocksr-backup/shadowsocksr-libev.git;
     cd shadowsocksr-libev;
-    ./configure --prefix="$HOME/ss" --with-openssl="$HOME/prebuilt";
+    ./configure --prefix="$HOME/ss" --with-openssl="$HOME/prebuilt" --disable-documentation;
     make && make install;
     umount /usr/local"'
 
