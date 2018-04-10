@@ -14,6 +14,6 @@ before_install:
 - git clone https://github.com/shadowsocksr-backup/shadowsocksr-libev.git
 script:
 - cd shadowsocksr-libev
-- ./configure
-- sudo make && make install
+- ./configure && make
+- sudo make install
 - ls
