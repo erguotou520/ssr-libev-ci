@@ -15,7 +15,7 @@ before_install:
 script:
 - cd shadowsocksr-libev
 - ./configure --disable-documentation && make
-- sudo make install
+# - sudo make install
 # - sudo find / -name ss-local
 deploy:
   provider: releases
