@@ -20,8 +20,8 @@ script:
 deploy:
   provider: releases
   api_key: $GITHUB_TOKEN
-  file_glob: true
-  file: src/ss-local
+  file:
+    - src/ss-local
   skip_cleanup: true
   on:
     repo: erguotou520/ssr-libev-ci
