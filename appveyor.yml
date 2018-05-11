@@ -1,5 +1,7 @@
 version: 0.1.{build}
-
+branches:
+  only:
+    - master
 image: Visual Studio 2017
 platform:
   - x32
@@ -22,14 +24,14 @@ init:
 # c:\cygwin-setup.exe --quiet-mode --no-shortcuts --no-startmenu --no-desktop --upgrade-also --only-site --site http://cygwin.mirror.constant.com/ --root c:\cygwin-root --local-package-dir c:\cygwin-setup-cache --packages automake,gcc-g++,make,pkg-config,openssl-devel,libicu-devel,zlib-devel,libcrypt-devel,perl,python3-devel,libsasl2-devel,cygport
 
 build_script:
-  - cmd: '%CYG_ROOT%\setup-x86.exe -qnNdO -R C:/cygwin -s http://cygwin.mirror.constant.com -l C:/cygwin/var/cache/setup -P autoconf -P automake -P bison -P gcc-core -P gcc-g++ -P mingw-runtime -P mingw-binutils -P mingw-gcc-core -P mingw-gcc-g++ -P mingw-pthreads -P mingw-w32api -P libtool -P make -P python -P gettext-devel -P gettext -P intltool -P libiconv -P pkg-config -P git -P wget -P curl -P openssl-devel -P zlib-devel -P cygport -P libpcre -P libcrypt-devel'
+  - cmd: '%CYG_ROOT%\setup-x86.exe -qnNdO -R C:/cygwin -s http://cygwin.mirror.constant.com -l C:/cygwin/var/cache/setup -P autoconf -P automake -P bison -P gcc-core -P gcc-g++ -P mingw-runtime -P mingw-binutils -P mingw-gcc-core -P mingw-gcc-g++ -P mingw-pthreads -P mingw-w32api -P libtool -P make -P python -P gettext-devel -P gettext -P intltool -P libiconv -P pkg-config -P git -P wget -P curl -P openssl-devel -P zlib-devel -P cygport -P libpcre-devel -P libcrypt-devel'
   - cmd: 'mkdir %APPVEYOR_BUILD_FOLDER%\install'
   - cmd: '%CYG_ROOT%/bin/bash --login -lc "export CYGWIN=winsymlinks:native;
     mount \"$APPVEYOR_BUILD_FOLDER\install\" /usr/local;
     cd $APPVEYOR_BUILD_FOLDER;
     git clone https://github.com/shadowsocksr-backup/shadowsocksr-libev.git;
     cd shadowsocksr-libev;
-    ./configure --prefix="$HOME/ss" --with-openssl="$HOME/prebuilt" --disable-documentation;
+    ./configure --prefix="$HOME/ss" --with-openssl="$HOME/prebuilt" --disable-documentation --enable-static;
     make && make install;
     umount /usr/local"'
 

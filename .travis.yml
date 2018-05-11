@@ -16,15 +16,15 @@ addons:
     - libtool
     - libssl-dev
     - libpcre3-dev
-    - asciidoc
     - xmlto
 before_install:
 - 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export CFLAGS="-I/usr/local/opt/openssl/include $CFLAGS" LDFLAGS="-L/usr/local/opt/openssl/lib $LDFLAGS"; fi'
 - git clone https://github.com/shadowsocksr-backup/shadowsocksr-libev.git
 script:
 - cd shadowsocksr-libev
-- ./configure --disable-documentation --enable-static
-- sudo make && make install
+- ./configure --disable-documentation --enable-static && make
+- sudo -i which clang #https://github.com/travis-ci/travis-ci/issues/2607
+- sudo make install
 deploy:
   provider: releases
   api_key: $GITHUB_TOKEN
@@ -35,3 +35,6 @@ deploy:
   on:
     repo: erguotou520/ssr-libev-ci
     branch: master
+branches:
+  only:
+  - master
