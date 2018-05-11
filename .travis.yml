@@ -19,11 +19,12 @@ addons:
     - asciidoc
     - xmlto
 before_install:
+- 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export CFLAGS="-I/usr/local/opt/openssl/include $CFLAGS" LDFLAGS="-L/usr/local/opt/openssl/lib $LDFLAGS"; fi'
 - git clone https://github.com/shadowsocksr-backup/shadowsocksr-libev.git
 script:
 - cd shadowsocksr-libev
-- ./configure --disable-documentation && make
-- sudo make install
+- ./configure --disable-documentation --enable-static
+- sudo make && make install
 deploy:
   provider: releases
   api_key: $GITHUB_TOKEN
