@@ -25,16 +25,20 @@ script:
 - ./configure --disable-documentation --enable-static && make
 - sudo -i which clang #https://github.com/travis-ci/travis-ci/issues/2607
 - sudo make install
+before_deploy:
+- 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then mv src/ss-local src/ss-local_darwin; fi'
+- 'if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then mv src/ss-local src/ss-local_linux; fi'
 deploy:
   provider: releases
   api_key: $GITHUB_TOKEN
   file:
-    - src/ss-local
-    - src/ss-redir
+    - src/ss-local_darwin
+    - src/ss-local_linux
   skip_cleanup: true
   on:
     repo: erguotou520/ssr-libev-ci
     branch: master
+    tags: true
 branches:
   only:
   - master
