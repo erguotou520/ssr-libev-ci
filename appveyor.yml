@@ -14,16 +14,17 @@ environment:
 max_jobs: 1
 
 init:
-  - git config --global core.autocrlf input
-  - curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
+  # - git config --global core.autocrlf input
+  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
 
 build_script:
-  - cmd: DIR $MSYS_PATH
+  - cmd: DIR '%MSYS_PATH%'
   # - cmd: '%BIN_PATH\bash --login -lc'
 # after_build:
 #   - cmd: DIR C:\cygwin\home
-
+on_finish:
+  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 test: off
 # deploy:
   # release: myproduct-v$(appveyor_build_version)
