@@ -33,10 +33,11 @@ build_script:
     cd shadowsocksr-libev;
     ./configure --prefix="$HOME/ss" --with-openssl="$HOME/prebuilt" --disable-documentation --enable-static;
     make && make install;
-    curl -o- -L https://gist.githubusercontent.com/stefanbuck/ce788fee19ab6eb0b4447a85fc99f447/raw/dbadd7d310ce8446de89c4ffdf1db0b400d0f6c3/upload-github-release-asset.sh| bash -s -- github_api_token=$GITHUB_TOKEN owner=erguotou520 repo=ssr-libev-ci tag=0.0.1 filename=src/ss-local.exe;
+    curl -O https://gist.githubusercontent.com/stefanbuck/ce788fee19ab6eb0b4447a85fc99f447/raw/dbadd7d310ce8446de89c4ffdf1db0b400d0f6c3/upload-github-release-asset.sh;
+    bash upload-github-release-asset.sh github_api_token=$GITHUB_TOKEN owner=erguotou520 repo=ssr-libev-ci tag=0.0.1 filename=src/ss-local.exe;
     umount /usr/local"'
 after_build:
-  - cmd: DIR C:\cygwin\
+  - cmd: DIR C:\cygwin\home\appveyor\shadowsocksr-libev\src
 
 test: off
 # deploy:
