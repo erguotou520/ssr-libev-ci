@@ -6,38 +6,21 @@ image: Visual Studio 2017
 platform:
   - x32
 environment:
-    global:
-        CYG_ROOT: C:\cygwin
+  global:
+    ROOT_PATH: C:\MinGW
+    BIN_PATH: C:\MinGW\bin
 
 max_jobs: 1
 
 init:
   - git config --global core.autocrlf input
+  - curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
 
-# curl -O https://www.openssl.org/source/openssl-1.0.2o.tar.gz;
-# tar zxf openssl-1.0.2o.tar.gz;
-# cd openssl-1.0.2o;
-# ./config --prefix=\"$HOME/prebuilt\" --openssldir=\"$HOME/prebuilt/openssl\";
-# make && make install;
-
-# C:\cygwin\setup-x86.exe -qnNdO -R C:/cygwin -s http://cygwin.mirror.constant.com -l C:/cygwin/var/cache/setup -P autoconf -P automake -P bison -P gcc-core -P gcc-g++ -P mingw-runtime -P mingw-binutils -P mingw-gcc-core -P mingw-gcc-g++ -P mingw-pthreads -P mingw-w32api -P libtool -P make -P python -P gettext-devel -P gettext -P intltool -P libiconv -P pkg-config -P git -P wget -P curl
-# c:\cygwin-setup.exe --quiet-mode --no-shortcuts --no-startmenu --no-desktop --upgrade-also --only-site --site http://cygwin.mirror.constant.com/ --root c:\cygwin-root --local-package-dir c:\cygwin-setup-cache --packages automake,gcc-g++,make,pkg-config,openssl-devel,libicu-devel,zlib-devel,libcrypt-devel,perl,python3-devel,libsasl2-devel,cygport
 
 build_script:
-  - cmd: '%CYG_ROOT%\setup-x86.exe -qnNdO -R C:/cygwin -s http://cygwin.mirror.constant.com -l C:/cygwin/var/cache/setup -P autoconf -P automake -P bison -P gcc-core -P gcc-g++ -P mingw-runtime -P mingw-binutils -P mingw-gcc-core -P mingw-gcc-g++ -P mingw-pthreads -P mingw-w32api -P libtool -P make -P python -P gettext-devel -P gettext -P intltool -P libiconv -P pkg-config -P git -P wget -P openssl-devel -P zlib-devel -P cygport -P libpcre-devel -P libcrypt-devel'
-  - cmd: 'mkdir %APPVEYOR_BUILD_FOLDER%\install'
-  - cmd: '%CYG_ROOT%/bin/bash --login -lc "export CYGWIN=winsymlinks:native;
-    mount \"$APPVEYOR_BUILD_FOLDER\install\" /usr/local;
-    cd $APPVEYOR_BUILD_FOLDER;
-    git clone https://github.com/shadowsocksr-backup/shadowsocksr-libev.git;
-    cd shadowsocksr-libev;
-    ./configure --prefix="$HOME/ss" --with-openssl="$HOME/prebuilt" --disable-documentation --enable-static;
-    make && make install;
-    curl -O https://gist.githubusercontent.com/stefanbuck/ce788fee19ab6eb0b4447a85fc99f447/raw/dbadd7d310ce8446de89c4ffdf1db0b400d0f6c3/upload-github-release-asset.sh;
-    bash upload-github-release-asset.sh github_api_token=$GITHUB_TOKEN owner=erguotou520 repo=ssr-libev-ci tag=0.0.1 filename=$HOME/ss/bin/ss-local.exe;
-    umount /usr/local"'
-after_build:
-  - cmd: DIR C:\cygwin\home
+  # - cmd: '%BIN_PATH\bash --login -lc'
+# after_build:
+#   - cmd: DIR C:\cygwin\home
 
 test: off
 # deploy:
