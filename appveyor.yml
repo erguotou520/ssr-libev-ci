@@ -34,7 +34,7 @@ build_script:
     ./configure --prefix="$HOME/ss" --with-openssl="$HOME/prebuilt" --disable-documentation --enable-static;
     make && make install;
     umount /usr/local"'
-test_script:
+after_build:
   - run: DIR C:\cygwin\
 
 test: off
