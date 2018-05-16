@@ -39,6 +39,3 @@ deploy:
     repo: erguotou520/ssr-libev-ci
     branch: master
     tags: true
-branches:
-  only:
-  - master

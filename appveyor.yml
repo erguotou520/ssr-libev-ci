@@ -41,7 +41,7 @@ deploy:
   # description: 'Release description'
   provider: GitHub
   auth_token:
-    secure: $GITHUB_TOKEN # your encrypted token from GitHub
+    secure: xIE5SqqZsm2W0Df0iY3ixz/silVwIQy++z049I6SepBdzqlGSnBjXOac3d987ST5 # your encrypted token from GitHub
   artifact: 'C:\cygwin\home\appveyor\shadowsocksr-libev\src\ss-local.exe' # upload ss-local.exe to release assets
   on:
     branch: master                 # release from master branch only
