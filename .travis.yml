@@ -4,9 +4,8 @@ dist: trusty
 language: c
 matrix:
   include:
-  - os: osx
+  # - os: osx
   - os: linux
-    env: CC=clang CXX=clang++
     compiler: clang
 addons:
   apt:
@@ -26,7 +25,17 @@ script:
 - ./configure --disable-documentation --enable-static && make
 - sudo -i which clang #https://github.com/travis-ci/travis-ci/issues/2607
 - sudo make install
-- 'if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./configure --host=x86_64-w64-mingw32 --cross-prefix=/usr/bin/x86_64-w64-mingw32- --sysroot=/usr/i686-w64-mingw32 --disable-documentation --enable-static && make && make install; fi'
+- 'if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+    cd ../;
+    curl -O https://www.openssl.org/source/openssl-1.0.2o.tar.gz;
+    tar zxf openssl-1.0.2o.tar.gz;
+    cd openssl-1.0.2o;
+    CROSS_COMPILE="x86_64-w64-mingw32-" ./Configure mingw64 no-asm shared --prefix=$HOME/prebuilt --openssldir=$HOME/prebuilt/openssl;
+    make && make install;
+    cd ../shadowsocksr-libev;
+    ./configure --host=x86_64-w64-mingw32 --disable-documentation --enable-static;
+    make && make install;
+  fi'
 before_deploy:
 - 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then mv src/ss-local src/ss-local_darwin; fi'
 - 'if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then mv src/ss-local src/ss-local_linux; fi'
