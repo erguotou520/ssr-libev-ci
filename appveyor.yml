@@ -15,7 +15,7 @@ max_jobs: 1
 
 init:
   - git config --global core.autocrlf input
-  # - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
 before_build:
   - cmd: 'C:\MinGW\bin\mingw-get.exe install mingw32-libz'
@@ -29,6 +29,6 @@ before_build:
   - cmd: 'git clone https://github.com/shadowsocksr-backup/shadowsocksr-libev.git C:\MinGW\msys\1.0\home\appveyor\shadowsocksr-libev'
 build_script:
   - cmd: 'C:\MinGW\msys\1.0\bin\sh.exe --login -c "chmod +x build.sh&&./build.sh"'
-# on_finish:
-#   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+on_finish:
+  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 test: off
