@@ -6,11 +6,10 @@ image: Visual Studio 2015
 platform:
   - x32
 environment:
-  global:
-    ROOT_PATH: C:\MinGW
-    BIN_PATH: C:\MinGW\bin
-    MSYS_PATH: C:\MinGW\msys\1.0
-    SHELL_PATH: C:\MinGW\msys\1.0\bin\sh.exe
+  ROOT_PATH: C:\MinGW
+  BIN_PATH: C:\MinGW\bin
+  MSYS_PATH: C:\MinGW\msys\1.0
+  SHELL_PATH: C:\MinGW\msys\1.0\bin\sh.exe
 
 max_jobs: 1
 
@@ -19,6 +18,7 @@ init:
   # - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
 install:
+  - echo %MSYS_PATH%
   - cmd: '%BIN_PATH%\mingw-get.exe install mingw32-libz'
   - cmd: '%BIN_PATH%\mingw-get.exe install mingw32-pthreads-w32'
   - ps: 'Start-FileDownload https://www.openssl.org/source/openssl-1.0.2o.tar.gz -FileName %MSYS_PATH%\home\appveyor\openssl-1.0.2o.tar.gz'
