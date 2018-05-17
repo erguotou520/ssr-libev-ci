@@ -23,9 +23,9 @@ install:
   - cmd: '%BIN_PATH%\mingw-get.exe install mingw32-pthreads-w32'
   - ps: Start-FileDownload 'https://www.openssl.org/source/openssl-1.0.2o.tar.gz' -FileName '%MSYS_PATH%\home\appveyor\openssl-1.0.2o.tar.gz'
   - ps: Start-FileDownload 'https://ftp.pcre.org/pub/pcre/pcre-8.42.zip' -FileName '%MSYS_PATH%\home\appveyor\pcre-8.42.zip'
-  - cmd: '%SHELL_PATH%' --login -c "tar zxf openssl-1.0.2o.tar.gz"
-  - cmd: 7z e '%MSYS_PATH%\home\appveyor\pcre-8.42.zip'
-  - cmd: git clone https://github.com/shadowsocksr-backup/shadowsocksr-libev.git '%MSYS_PATH%\home\appveyor‘
+  - cmd: '%SHELL_PATH% --login -c "tar zxf openssl-1.0.2o.tar.gz"'
+  - cmd: '7z e %MSYS_PATH%\home\appveyor\pcre-8.42.zip'
+  - cmd: 'git clone https://github.com/shadowsocksr-backup/shadowsocksr-libev.git %MSYS_PATH%\home\appveyor'
 build_script:
   - cmd: '%SHELL_PATH%' --login -c "mount c:/mingw /mingw;
     mingw-get upgrade "w32api<5.0.2";
