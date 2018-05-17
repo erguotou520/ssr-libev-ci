@@ -17,7 +17,7 @@ init:
   - git config --global core.autocrlf input
   # - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
-install:
+before_build:
   - cmd: '%BIN_PATH%\mingw-get.exe install mingw32-libz'
   - cmd: '%BIN_PATH%\mingw-get.exe install mingw32-pthreads-w32'
   - cmd: appveyor DownloadFile https://www.openssl.org/source/openssl-1.0.2o.tar.gz -FileName '%MSYS_PATH%\home\appveyor\openssl-1.0.2o.tar.gz'
