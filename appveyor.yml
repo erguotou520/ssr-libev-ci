@@ -20,6 +20,7 @@ init:
 before_build:
   - cmd: 'C:\MinGW\bin\mingw-get.exe install mingw32-libz'
   - cmd: 'C:\MinGW\bin\mingw-get.exe install mingw32-pthreads-w32'
+  - cmd: 'C:\MinGW\msys\1.0\bin\sh.exe --login -c "pwd"'
   - ps: Start-FileDownload 'https://www.openssl.org/source/openssl-1.0.2o.tar.gz' -FileName C:\MinGW\msys\1.0\home\appveyor\openssl-1.0.2o.tar.gz
   - ps: Start-FileDownload 'https://ftp.pcre.org/pub/pcre/pcre-8.42.zip' -FileName C:\MinGW\msys\1.0\home\appveyor\pcre-8.42.zip
   - cmd: 'C:\MinGW\msys\1.0\bin\sh.exe --login -c "tar zxf openssl-1.0.2o.tar.gz"'
