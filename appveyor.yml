@@ -2,7 +2,7 @@ version: 0.1.{build}
 branches:
   only:
     - master
-image: Visual Studio 2017
+image: Visual Studio 2015
 platform:
   - x32
 environment:
@@ -10,30 +10,37 @@ environment:
     ROOT_PATH: C:\MinGW
     BIN_PATH: C:\MinGW\bin
     MSYS_PATH: C:\MinGW\msys\1.0
+    SHELL_PATH: C:\MinGW\msys\1.0\bin\sh.exe
 
 max_jobs: 1
 
 init:
-  # - git config --global core.autocrlf input
+  - git config --global core.autocrlf input
   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
-
+install:
+  - cmd: '%BIN_PATH%\mingw-get.exe' install mingw32-libz
+  - cmd: '%BIN_PATH%\mingw-get.exe' install mingw32-pthreads-w32
+  - ps: Start-FileDownload 'https://www.openssl.org/source/openssl-1.0.2o.tar.gz' -FileName '%MSYS_PATH%\home\appveyor\openssl-1.0.2o.tar.gz'
+  - ps: Start-FileDownload 'https://ftp.pcre.org/pub/pcre/pcre-8.42.zip' -FileName '%MSYS_PATH%\home\appveyor\pcre-8.42.zip'
+  - cmd: '%SHELL_PATH%' --login -c "tar zxf openssl-1.0.2o.tar.gz"
+  - cmd: 7z e '%MSYS_PATH%\home\appveyor\pcre-8.42.zip'
+  - cmd: git clone https://github.com/shadowsocksr-backup/shadowsocksr-libev.git '%MSYS_PATH%\home\appveyor‘
 build_script:
-  - cmd: DIR '%MSYS_PATH%'
-  # - cmd: '%BIN_PATH\bash --login -lc'
-# after_build:
-#   - cmd: DIR C:\cygwin\home
+  - cmd: '%SHELL_PATH%' --login -c "mount c:/mingw /mingw;
+    mingw-get upgrade "w32api<5.0.2";
+    autoreconf -f -i;
+    cd openssl-1.0.2o;
+    ./configure --prefix=~/prebuilt --openssldir=~/prebuilt/openssl;
+    make && make install;
+    cd ../pcre-8.42;
+    ./configure --prefix=/mingw --disable-shared --disable-cpp --enable-newline-is-anycrlf --enable-utf8 --enable-unicode -properties;
+    cd ../shadowsocksr-libev;
+    ./configure --prefix=~/ss --with-openssl=~/prebuilt --disable-documentation --enable-static;
+    make && make install;
+    curl -O https://gist.githubusercontent.com/stefanbuck/ce788fee19ab6eb0b4447a85fc99f447/raw/dbadd7d310ce8446de89c4ffdf1db0b400d0f6c3/upload-github-release-asset.sh;
+    bash upload-github-release-asset.sh github_api_token=$GITHUB_TOKEN owner=erguotou520 repo=ssr-libev-ci tag=0.0.2 filename=~/ss/bin/ss-local.exe;
+    unmount /mingw"
 on_finish:
   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 test: off
-# deploy:
-  # release: myproduct-v$(appveyor_build_version)
-  # description: 'Release description'
-  # provider: GitHub
-  # auth_token:
-    # secure: xIE5SqqZsm2W0Df0iY3ixz/silVwIQy++z049I6SepBdzqlGSnBjXOac3d987ST5 # your encrypted token from GitHub
-  # artifact: 'C:\cygwin\home\appveyor\shadowsocksr-libev\src\ss-local.exe' # upload ss-local.exe to release assets
-  # on:
-    # branch: master                 # release from master branch only
-    # appveyor_repo_tag: true        # deploy on tag push only
-  # force_update: true
