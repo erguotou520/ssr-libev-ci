@@ -8,7 +8,7 @@ echo "Make openssl"
 make && make install
 cd ../pcre-8.42
 echo "Start configure pcre"
-./configure --prefix=/mingw --disable-shared --disable-cpp --enable-newline-is-anycrlf --enable-utf8 --enable-unicode -properties
+./configure --prefix=/mingw --disable-shared --disable-cpp --enable-newline-is-anycrlf --enable-utf8 --enable-unicode-properties
 echo "Make pcre"
 make && make install
 cd ../shadowsocksr-libev
