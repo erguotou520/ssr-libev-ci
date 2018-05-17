@@ -39,3 +39,4 @@ deploy:
     repo: erguotou520/ssr-libev-ci
     branch: master
     tags: true
+if: tag IS present
