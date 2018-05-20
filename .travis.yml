@@ -11,6 +11,7 @@ addons:
   apt:
     packages:
     - build-essential
+    - libz-dev
     - autoconf
     - libtool
     - libssl-dev
@@ -32,8 +33,20 @@ script:
     cd openssl-1.0.2o;
     CROSS_COMPILE="x86_64-w64-mingw32-" ./Configure mingw64 no-asm shared --prefix=$HOME/prebuilt --openssldir=$HOME/prebuilt/openssl;
     make && make install;
+    cd ../;
+    curl -O https://ftp.pcre.org/pub/pcre/pcre-8.42.zip;
+    unzip pcre-8.42.zip;
+    cd pcre-8.42;
+    ./configure --host=x86_64-w64-mingw32 --prefix=$HOME/prebuilt;
+    make && make install;
+    cd ../;
+    curl -O https://zlib.net/zlib-1.2.11.tar.gz;
+    tar zxf zlib-1.2.11.tar.gz;
+    cd zlib-1.2.11;
+    CC=x86_64-w64-mingw32-gcc ./configure --prefix=$HOME/prebuilt;
+    make && make install;
     cd ../shadowsocksr-libev;
-    ./configure --host=x86_64-w64-mingw32 --disable-documentation --enable-static;
+    ./configure --host=x86_64-w64-mingw32 --disable-documentation --enable-static --with-pcre=$HOME/prebuilt --with-ssl=$HOME/prebuilt --with-zlib=$HOME/prebuilt;
     make && make install;
   fi'
 before_deploy:
