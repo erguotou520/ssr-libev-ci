@@ -17,7 +17,6 @@ addons:
     - libssl-dev
     - libpcre3-dev
     - xmlto
-    - mingw-w64
 before_install:
 - 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
     export OBJC=clang;
@@ -35,42 +34,19 @@ script:
 - ./configure --disable-documentation --enable-static && make
 - sudo -i which clang #https://github.com/travis-ci/travis-ci/issues/2607
 - sudo make install
-- 'if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-    cd ../;
-    curl -O https://www.openssl.org/source/openssl-1.0.2o.tar.gz;
-    tar zxf openssl-1.0.2o.tar.gz;
-    cd openssl-1.0.2o;
-    CROSS_COMPILE="x86_64-w64-mingw32-" ./Configure mingw64 no-asm shared --prefix=$HOME/prebuilt --openssldir=$HOME/prebuilt/openssl;
-    make && make install;
-    cd ../;
-    curl -O https://ftp.pcre.org/pub/pcre/pcre-8.42.zip;
-    unzip pcre-8.42.zip;
-    cd pcre-8.42;
-    ./configure --host=x86_64-w64-mingw32 --prefix=$HOME/prebuilt;
-    make && make install;
-    cd ../;
-    curl -O https://zlib.net/zlib-1.2.11.tar.gz;
-    tar zxf zlib-1.2.11.tar.gz;
-    cd zlib-1.2.11;
-    CC=x86_64-w64-mingw32-gcc ./configure --prefix=$HOME/prebuilt;
-    make && make install;
-    cd ../shadowsocksr-libev;
-    ./configure --host=x86_64-w64-mingw32 --disable-documentation --enable-static --with-pcre=$HOME/prebuilt --with-ssl=$HOME/prebuilt --with-zlib=$HOME/prebuilt;
-    make && make install;
+- mkdir -p /tmp/ssr
+- cp src/ss-local /tmp/ssr
+- 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+    install_name_tool -change /usr/local/opt/openssl/lib/libcrypto.1.0.0.dylib @executable_path/libcrypto.1.0.0.dylib src/ss-local;
+    install_name_tool -change /usr/local/opt/pcre/lib/libpcre.1.dylib @executable_path/libpcre.1.dylib src/ss-local;
+    cp /usr/local/opt/openssl/lib/libcrypto.1.0.0.dylib /tmp/ssr;
+    cp /usr/local/opt/pcre/lib/libpcre.1.dylib /tmp/ssr;
   fi'
-before_deploy:
-- 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then mv src/ss-local src/ss-local_darwin; fi'
-- 'if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then mv src/ss-local src/ss-local_linux; fi'
-deploy:
-  provider: releases
-  api_key: $GITHUB_TOKEN
-  file:
-    - src/ss-local_darwin
-    - src/ss-local_linux
-    - bin/ss-local.exe
-  skip_cleanup: true
-  on:
-    repo: erguotou520/ssr-libev-ci
-    branch: master
-    tags: true
-# if: tag IS present
+after_success:
+  - cd /tmp/ssr
+  - git init
+  - git add ./ -A
+  - git commit -m "Auto build with Travis CI"
+  - 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then git push -u https://$GITHUB_TOKEN@github.com/erguotou520/ssr-libev-ci.git HEAD:darwin --force; fi'
+  - 'if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then git push -u https://$GITHUB_TOKEN@github.com/erguotou520/ssr-libev-ci.git HEAD:linux --force; fi'
+if: tag IS present
