@@ -15,14 +15,13 @@ init:
   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
 before_build:
-
   - ps: git config --global push.default matching
   - ps: git config --global user.name "erguotou"
   - ps: git config --global user.email "erguotou525@gmail.com"
   #  生成home目录
   - ps: 'C:\msys64\mingw64.exe --login -i "pwd;pacman -Syu --noconfirm"'
   - ps: Start-FileDownload 'https://raw.githubusercontent.com/erguotou520/ssr-libev-ci/master/msys.sh' -FileName C:\msys64\home\appveyor\msys.sh
-  build_script:
+build_script:
   - ps: 'C:\msys64\mingw64.exe --login -c "chmod +x msys.sh&&./msys.sh"'
 after_build:
   - ps: mkdir ssr
