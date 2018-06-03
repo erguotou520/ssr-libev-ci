@@ -10,8 +10,8 @@ platform:
   - x32
 max_jobs: 1
 
-# init:
-#   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+init:
+  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
 before_build:
   - ps: set MSYSTEM=MINGW64
@@ -21,7 +21,7 @@ before_build:
   - ps: git config --global user.email "erguotou525@gmail.com"
   - ps: Start-FileDownload 'https://raw.githubusercontent.com/erguotou520/ssr-libev-ci/master/msys.sh' -FileName C:\msys64\home\appveyor\msys.sh
   #  生成home目录
-  - ps: C:\msys64\usr\bin\bash.exe --login -c "pwd && pacman -Syu"
+  - ps: C:\msys64\usr\bin\bash.exe --login -c "pwd && pacman -Syu —noconfirm"
 build_script:
   - ps: set MSYSTEM=MINGW64
   - ps: C:\msys64\usr\bin\bash.exe --login -c "chmod +x msys.sh && ./msys.sh"
@@ -37,6 +37,6 @@ after_build:
   - ps: git add ./ -A
   - ps: git commit -m "Auto build with Appveyor"
   - ps: git push -u https://$GITHUB_TOKEN@github.com/erguotou520/ssr-libev-ci.git HEAD:win32 --force
-# on_finish:
-#   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+on_finish:
+  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 test: off
