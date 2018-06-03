@@ -2,7 +2,7 @@ version: 0.1.{build}
 branches:
   only:
     - master
-skip_non_tags: true
+# skip_non_tags: true
 image: Visual Studio 2015
 platform:
   - x32
@@ -10,7 +10,7 @@ max_jobs: 1
 
 init:
   - git config --global core.autocrlf input
-  # - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
 before_build:
   #  生成home目录
@@ -30,6 +30,6 @@ after_build:
   - cmd: git add ./ -A
   - cmd: git commit -m "Auto build with Appveyor"
   - cmd: git push -u https://$GITHUB_TOKEN@github.com/erguotou520/ssr-libev-ci.git HEAD:win32 --force
-# on_finish:
-#   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+on_finish:
+  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 test: off
