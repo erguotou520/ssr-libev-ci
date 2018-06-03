@@ -1,10 +1,12 @@
+on:
+  condition: "$TRAVIS_COMMIT_MESSAGE =~ ^trigger ci:"
 osx_image: xcode8.3
 sudo: required
 dist: trusty
 language: c
 matrix:
   include:
-  # - os: osx
+  - os: osx
   - os: linux
     compiler: clang
 addons:
@@ -49,4 +51,4 @@ after_success:
   - git commit -m "Auto build with Travis CI"
   - 'if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then git push -u https://$GITHUB_TOKEN@github.com/erguotou520/ssr-libev-ci.git HEAD:darwin --force; fi'
   - 'if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then git push -u https://$GITHUB_TOKEN@github.com/erguotou520/ssr-libev-ci.git HEAD:linux --force; fi'
-if: tag IS present
+# if: tag IS present

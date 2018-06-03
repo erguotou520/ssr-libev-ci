@@ -3,6 +3,8 @@ branches:
   only:
     - master
 # skip_non_tags: true
+only_commits:
+  message: /^trigger ci:/
 image: Visual Studio 2015
 platform:
   - x32
@@ -13,23 +15,27 @@ init:
   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
 before_build:
+
+  - ps: git config --global push.default matching
+  - ps: git config --global user.name "erguotou"
+  - ps: git config --global user.email "erguotou525@gmail.com"
   #  生成home目录
-  - cmd: 'C:\msys64\bin\sh.exe --login -i "pwd"'
+  - ps: 'C:\msys64\mingw64.exe --login -i "pwd;pacman -Syu --noconfirm"'
   - ps: Start-FileDownload 'https://raw.githubusercontent.com/erguotou520/ssr-libev-ci/master/msys.sh' -FileName C:\msys64\home\appveyor\msys.sh
-build_script:
-  - cmd: 'C:\msys64\bin\sh.exe --login -c "chmod +x msys.sh&&./msys.sh"'
+  build_script:
+  - ps: 'C:\msys64\mingw64.exe --login -c "chmod +x msys.sh&&./msys.sh"'
 after_build:
-  - cmd: mkdir ssr
-  - cmd: copy 'C:\msys64\home\appveyor\shadowsocksr-libev/src/ss-local.exe' ssr\ss-local.exe
-  - cmd: copy 'C:\msys64\mingw64\bin\libeay32.dll' ssr\libeay32.dll
-  - cmd: copy 'C:\msys64\mingw64\bin\libpcre-1.dll' ssr\libpcre-1.dll
-  - cmd: copy 'C:\msys64\mingw64\bin\libssp-0.dll' ssr\libssp-0.dll
-  - cmd: copy 'C:\msys64\mingw64\bin\libwinpthread-1.dll' ssr\libwinpthread-1.dll
-  - cmd: cd ssr
-  - cmd: git init
-  - cmd: git add ./ -A
-  - cmd: git commit -m "Auto build with Appveyor"
-  - cmd: git push -u https://$GITHUB_TOKEN@github.com/erguotou520/ssr-libev-ci.git HEAD:win32 --force
+  - ps: mkdir ssr
+  - ps: Copy-Item C:\msys64\home\appveyor\shadowsocksr-libev\src\ss-local.exe C:\Users\appveyor\ssr
+  - ps: Copy-Item C:\msys64\mingw64\bin\libeay32.dll C:\Users\appveyor\ssr
+  - ps: Copy-Item C:\msys64\mingw64\bin\libpcre-1.dll C:\Users\appveyor\ssr
+  - ps: Copy-Item C:\msys64\mingw64\bin\libssp-0.dll C:\Users\appveyor\ssr
+  - ps: Copy-Item C:\msys64\mingw64\bin\libwinpthread-1.dll C:\Users\appveyor\ssr
+  - ps: cd ssr
+  - ps: git init
+  - ps: git add ./ -A
+  - ps: git commit -m "Auto build with Appveyor"
+  - ps: git push -u https://$GITHUB_TOKEN@github.com/erguotou520/ssr-libev-ci.git HEAD:win32 --force
 on_finish:
   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 test: off
