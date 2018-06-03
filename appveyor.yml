@@ -20,7 +20,7 @@ before_build:
   - ps: git config --global user.name "erguotou"
   - ps: git config --global user.email "erguotou525@gmail.com"
   #  生成home目录
-  - ps: C:\msys64\usr\bin\bash.exe --login -c "pwd && pacman -Syu --noconfirm"
+  - ps: C:\msys64\usr\bin\bash.exe --login -c "pwd"
   - ps: Start-FileDownload 'https://raw.githubusercontent.com/erguotou520/ssr-libev-ci/master/msys.sh' -FileName C:\msys64\home\appveyor\msys.sh
 build_script:
   - ps: set MSYSTEM=MINGW64 & C:\msys64\usr\bin\bash.exe --login -c "chmod +x msys.sh && ./msys.sh"
