@@ -1,3 +1,4 @@
+# pacman -Syu
 pacman -Su --noconfirm
 # pacman -S git gcc make pcre-devel zlib-devel openssl-devel --noconfirm
 pacman -S mingw64/mingw-w64-x86_64-gcc mingw64/mingw-w64-x86_64-pcre mingw64/mingw-w64-x86_64-zlib mingw64/mingw-w64-x86_64-openssl --noconfirm
