@@ -36,7 +36,7 @@ after_build:
   - cmd: git init
   - cmd: git add ./ -A
   - cmd: git commit -m "Auto build with Appveyor"
-  - cmd: git push -u https://%GITHUB_TOKEN%github.com/erguotou520/ssr-libev-ci.git HEAD:win32 --force
+  - cmd: git push -u https://%GITHUB_TOKEN%@github.com/erguotou520/ssr-libev-ci.git HEAD:win32 --force
 # on_finish:
 #   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 test: off
