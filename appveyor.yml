@@ -23,8 +23,7 @@ before_build:
   #  生成home目录
   - ps: C:\msys64\usr\bin\bash.exe --login -c "pwd && pacman -Syu --noconfirm 2>&1"
 build_script:
-  - ps: set MSYSTEM=MINGW64
-  - ps: C:\msys64\usr\bin\bash.exe --login -c "chmod +x msys.sh && ./msys.sh"
+  - ps: 'set MSYSTEM=MINGW64 & C:\msys64\usr\bin\bash.exe --login -c "chmod +x msys.sh && ./msys.sh"'
 after_build:
   - ps: mkdir ssr
   - ps: Copy-Item C:\msys64\home\appveyor\shadowsocksr-libev\src\ss-local.exe C:\Users\appveyor\ssr
