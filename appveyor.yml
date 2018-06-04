@@ -26,13 +26,13 @@ build_script:
   - cmd: set MSYSTEM=MINGW64
   - cmd: C:\msys64\usr\bin\bash.exe --login -c "chmod +x msys.sh && ./msys.sh"
 after_build:
-  - ps: mkdir ssr
+  - ps: mkdir C:\Users\appveyor\ssr
   - ps: Copy-Item C:\msys64\home\appveyor\shadowsocksr-libev\src\ss-local.exe C:\Users\appveyor\ssr
   - ps: Copy-Item C:\msys64\mingw64\bin\libeay32.dll C:\Users\appveyor\ssr
   - ps: Copy-Item C:\msys64\mingw64\bin\libpcre-1.dll C:\Users\appveyor\ssr
   - ps: Copy-Item C:\msys64\mingw64\bin\libssp-0.dll C:\Users\appveyor\ssr
   - ps: Copy-Item C:\msys64\mingw64\bin\libwinpthread-1.dll C:\Users\appveyor\ssr
-  - ps: cd ssr
+  - ps: cd C:\Users\appveyor\ssr
   - ps: git init
   - ps: git add ./ -A
   - ps: git commit -m "Auto build with Appveyor"
