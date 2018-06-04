@@ -14,16 +14,17 @@ max_jobs: 1
 #   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
 before_build:
-  - ps: set MSYSTEM=MINGW64
   - ps: git config --global core.autocrlf input
   - ps: git config --global push.default matching
   - ps: git config --global user.name "erguotou"
   - ps: git config --global user.email "erguotou525@gmail.com"
   - ps: Start-FileDownload 'https://raw.githubusercontent.com/erguotou520/ssr-libev-ci/master/msys.sh' -FileName C:\msys64\home\appveyor\msys.sh
   #  生成home目录
-  - ps: C:\msys64\usr\bin\bash.exe --login -c "pwd && pacman -Syu --noconfirm 2>&1"
+  - cmd: set MSYSTEM=MINGW64
+  - cmd: C:\msys64\usr\bin\bash.exe --login -c "pwd && pacman -Syu --noconfirm 2>&1"
 build_script:
-  - ps: set MSYSTEM=MINGW64 "&" C:\msys64\usr\bin\bash.exe --login -c "chmod +x msys.sh && ./msys.sh"
+  - cmd: set MSYSTEM=MINGW64
+  - cmd: C:\msys64\usr\bin\bash.exe --login -c "chmod +x msys.sh && ./msys.sh"
 after_build:
   - ps: mkdir ssr
   - ps: Copy-Item C:\msys64\home\appveyor\shadowsocksr-libev\src\ss-local.exe C:\Users\appveyor\ssr
